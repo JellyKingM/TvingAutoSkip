@@ -1,0 +1,17 @@
+{
+  "appName": { "message": "tving Opening Auto Skip" },
+  "appShortName": { "message": "tving Auto Skip" },
+  "appDesc": { "message": "Automatically clicks the \"Skip Opening\" button on TVING." },
+  "actionTitle": { "message": "tving Opening Auto Skip" },
+
+  "popupTitle": { "message": "tving Auto Skip Settings" },
+  "labelHotkey": { "message": "Next Episode Hotkey" },
+  "hotkeyPlaceholder": { "message": "Click, then press a key (e.g., PageDown)" },
+  "hotkeyHint": { "message": "When this hotkey is pressed on the player page, it clicks the Next Episode button." },
+  "hotkeyPressNow": { "message": "Press a key…" },
+  "btnReset": { "message": "Reset to PageDown" },
+
+  "labelAutoSkip": { "message": "Auto-skip Opening" },
+  "autoSkipOn": { "message": "On" },
+  "autoSkipOff": { "message": "Off" }
+}
