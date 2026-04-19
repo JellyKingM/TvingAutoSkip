@@ -144,9 +144,14 @@
 	// ===== (D) #test 다음 형제 요소 숨김 =====
 	function hideTestNextSibling() {
 		const testEl = document.querySelector('#test');
-		const target = testEl && testEl.nextElementSibling;
+		const siblings = testEl && testEl.parentElement
+			? Array.from(testEl.parentElement.children)
+			: [];
+		const testIndex = siblings.indexOf(testEl);
+		const target = testIndex !== -1 ? siblings[testIndex + 1] : null;
 		if (!target) return false;
 
+		target.dataset.tvingAutoSkipHiddenSibling = 'true';
 		target.style.setProperty('display', 'none', 'important');
 		return true;
 	}
