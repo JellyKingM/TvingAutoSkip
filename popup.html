@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>__MSG_popupTitle__</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 12px; width: 280px; }
+    .row { margin-bottom: 12px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+    input[type="text"] { width: 100%; padding: 8px; box-sizing: border-box; }
+    .hint { color: #666; font-size: 12px; margin-top: 4px; }
+    .toggle { display: flex; align-items: center; gap: 8px; }
+    button { padding: 6px 10px; }
+    .status { font-size: 12px; color: #555; }
+  </style>
+</head>
+<body>
+  <div class="row">
+    <label>__MSG_labelHotkey__</label>
+    <input id="hotkeyInput" type="text" placeholder="__MSG_hotkeyPlaceholder__" readonly />
+    <div class="hint">__MSG_hotkeyHint__</div>
+    <div style="margin-top:8px;">
+      <button id="resetBtn">__MSG_btnReset__</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <label>__MSG_labelAutoSkip__</label>
+    <div class="toggle">
+      <input id="autoSkipToggle" type="checkbox" />
+      <span id="autoSkipStatus" class="status"></span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
