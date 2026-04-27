@@ -1,28 +1,91 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title data-i18n="popupTitle"></title>
   <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 12px; width: 280px; }
-    .row { margin-bottom: 12px; }
-    label { display: block; font-weight: 600; margin-bottom: 6px; }
-    input[type="text"] { width: 100%; padding: 8px; box-sizing: border-box; }
-    .hint { color: #666; font-size: 12px; margin-top: 4px; }
-    .toggle { display: flex; align-items: center; gap: 8px; }
-    button { padding: 6px 10px; }
-    .status { font-size: 12px; color: #555; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      margin: 12px;
+      width: 280px;
+    }
+
+    .row {
+      margin-bottom: 12px;
+    }
+
+    fieldset {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 12px;
+      margin: 0 0 12px 0;
+    }
+
+    legend {
+      font-weight: 600;
+      padding: 0 5px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      margin-bottom: 4px;
+    }
+
+    .hint {
+      color: #666;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button {
+      padding: 6px 10px;
+    }
+
+    .status {
+      font-size: 12px;
+      color: #555;
+    }
   </style>
 </head>
+
 <body>
-  <div class="row">
-    <label data-i18n="labelHotkey"></label>
+  <fieldset>
+    <legend data-i18n="labelHotkey"></legend>
     <input id="hotkeyInput" type="text" data-i18n-placeholder="hotkeyPlaceholder" readonly />
     <div class="hint" data-i18n="hotkeyHint"></div>
     <div style="margin-top:8px;">
       <button id="resetBtn" data-i18n="btnReset"></button>
     </div>
-  </div>
+  </fieldset>
+
+  <fieldset>
+    <legend data-i18n="labelSpeedHotkey"></legend>
+    <div style="display:flex; gap:8px; margin-bottom: 4px;">
+      <input id="speedDownInput" type="text" style="width:48%; margin:0;" data-i18n-placeholder="speedDownPlaceholder" readonly />
+      <input id="speedUpInput" type="text" style="width:48%; margin:0;" data-i18n-placeholder="speedUpPlaceholder" readonly />
+    </div>
+    <div class="hint" data-i18n="speedHotkeyHint"></div>
+    <div style="margin-top:8px;">
+      <button id="resetSpeedBtn" data-i18n="btnResetSpeed"></button>
+    </div>
+  </fieldset>
 
   <div class="row">
     <label data-i18n="labelAutoSkip"></label>
@@ -34,4 +97,5 @@
 
   <script src="popup.js"></script>
 </body>
+
 </html>

@@ -11,6 +11,12 @@
   "hotkeyPressNow": { "message": "Press a key…" },
   "btnReset": { "message": "Reset to PageDown" },
 
+  "labelSpeedHotkey": { "message": "Playback Speed Hotkeys" },
+  "speedDownPlaceholder": { "message": "Click for Speed Down" },
+  "speedUpPlaceholder": { "message": "Click for Speed Up" },
+  "speedHotkeyHint": { "message": "Press these keys on the player page to adjust playback speed." },
+  "btnResetSpeed": { "message": "Reset to , and ." },
+
   "labelAutoSkip": { "message": "Auto-skip Opening" },
   "autoSkipOn": { "message": "On" },
   "autoSkipOff": { "message": "Off" }
