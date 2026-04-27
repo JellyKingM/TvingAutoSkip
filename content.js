@@ -19,6 +19,7 @@
 	let mo = null;
 	let scanTimer = null;
 	let observerKillTimer = null;
+	let testSiblingObserver = null;
 	let lastClickAt = 0;
 	let lastNextClickAt = 0;
 	let lastObservedUrl = location.href;
@@ -140,6 +141,38 @@
 		}
 	}
 
+	// ===== (D) #test 다음 형제 요소 숨김 =====
+	function hideTestNextSibling() {
+		const testEl = document.querySelector('#test');
+		const siblings = testEl && testEl.parentElement
+			? Array.from(testEl.parentElement.children)
+			: [];
+		const testIndex = siblings.indexOf(testEl);
+		const target = testIndex !== -1 ? siblings[testIndex + 1] : null;
+		if (!target) return false;
+
+		target.dataset.tvingAutoSkipHiddenSibling = 'true';
+		target.style.setProperty('display', 'none', 'important');
+		return true;
+	}
+
+	function installTestSiblingHider() {
+		hideTestNextSibling();
+
+		if (testSiblingObserver) return;
+
+		testSiblingObserver = new MutationObserver(() => {
+			hideTestNextSibling();
+		});
+
+		try {
+			testSiblingObserver.observe(document.documentElement || document.body, {
+				childList: true,
+				subtree: true
+			});
+		} catch {}
+	}
+
 	// ===== 옵저버 라운드 =====
 	function stopObserving() {
 		if (mo) { try { mo.disconnect(); } catch {} mo = null; }
@@ -233,6 +266,7 @@
 				inited = true;
 				installUrlChangeHooks();
 				installKeyHandler();
+				installTestSiblingHider();
 			}
 
 			if (config.autoSkipEnabled) startObservingRound();
