@@ -1,4 +1,13 @@
-(function () {
+document.addEventListener('DOMContentLoaded', () => {
+  // i18n
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = chrome.i18n.getMessage(el.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = chrome.i18n.getMessage(el.dataset.i18nPlaceholder);
+  });
+  document.title = chrome.i18n.getMessage('popupTitle');
+
   const DEFAULTS = { autoSkipEnabled: true, hotkeyCode: 'PageDown' };
 
   const hotkeyInput = document.getElementById('hotkeyInput');
@@ -57,4 +66,4 @@
     autoSkipToggle.checked = !!items.autoSkipEnabled;
     setAutoSkipStatus(!!items.autoSkipEnabled);
   });
-})();
+});

@@ -42,7 +42,7 @@
   function findSkipOpeningButton(root = document) {
     // 빠른 단일 셀렉터 시도
     let btn = root.querySelector(
-      'div.absolute.w-full.bottom-24 > div[class^="PcSkipOpeningButton_overlayButton"] > button[type="button"]'
+      'div.absolute.w-full.bottom-24 > div > button[type="button"]'
     );
     if (btn && isVisible(btn)) return btn;
 

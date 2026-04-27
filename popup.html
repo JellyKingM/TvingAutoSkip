@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>__MSG_popupTitle__</title>
+  <title data-i18n="popupTitle"></title>
   <style>
     body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 12px; width: 280px; }
     .row { margin-bottom: 12px; }
@@ -16,16 +16,16 @@
 </head>
 <body>
   <div class="row">
-    <label>__MSG_labelHotkey__</label>
-    <input id="hotkeyInput" type="text" placeholder="__MSG_hotkeyPlaceholder__" readonly />
-    <div class="hint">__MSG_hotkeyHint__</div>
+    <label data-i18n="labelHotkey"></label>
+    <input id="hotkeyInput" type="text" data-i18n-placeholder="hotkeyPlaceholder" readonly />
+    <div class="hint" data-i18n="hotkeyHint"></div>
     <div style="margin-top:8px;">
-      <button id="resetBtn">__MSG_btnReset__</button>
+      <button id="resetBtn" data-i18n="btnReset"></button>
     </div>
   </div>
 
   <div class="row">
-    <label>__MSG_labelAutoSkip__</label>
+    <label data-i18n="labelAutoSkip"></label>
     <div class="toggle">
       <input id="autoSkipToggle" type="checkbox" />
       <span id="autoSkipStatus" class="status"></span>
