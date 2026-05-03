@@ -106,9 +106,51 @@
 		return buttons.findIndex(btn => btn.classList.contains('PcPlayerMenu_active__HiYjc'));
 	}
 
+	// ===== (E) 배속 표시 오버레이 =====
+	let speedOverlayTimer = null;
+	function showSpeedOverlay(speed) {
+		let overlay = document.getElementById('tving-auto-skip-speed-overlay');
+		if (!overlay) {
+			overlay = document.createElement('div');
+			overlay.id = 'tving-auto-skip-speed-overlay';
+			Object.assign(overlay.style, {
+				position: 'fixed',
+				top: '40px',
+				right: '40px',
+				padding: '10px 20px',
+				backgroundColor: 'rgba(255, 255, 255, 0.6)',
+				color: 'rgba(0, 0, 0, 0.6)',
+				fontSize: '2rem',
+				fontWeight: 'bold',
+				borderRadius: '15px',
+				zIndex: '999999',
+				pointerEvents: 'none',
+				transition: 'opacity 0.2s ease-in-out',
+				display: 'none',
+				fontFamily: 'sans-serif'
+			});
+			document.body.appendChild(overlay);
+		}
+
+		overlay.textContent = `${speed}x`;
+		overlay.style.display = 'block';
+		overlay.style.opacity = '1';
+
+		if (speedOverlayTimer) clearTimeout(speedOverlayTimer);
+		speedOverlayTimer = setTimeout(() => {
+			overlay.style.opacity = '0';
+			setTimeout(() => {
+				if (overlay.style.opacity === '0') overlay.style.display = 'none';
+			}, 200);
+		}, 1000);
+	}
+
 	function handleSpeedKey(e) {
 		if (isEditable(document.activeElement)) return;
 		if (e.code !== config.speedDownKey && e.code !== config.speedUpKey) return;
+
+		const video = document.querySelector('video');
+		if (!video) return;
 
 		// 1. 첫번째 control-button에 mouseover 이벤트 디스패치
 		const controlBtns = document.querySelectorAll('button.control-button');
@@ -121,25 +163,55 @@
 
 		// 2. 배속 버튼 탐색 및 클릭
 		const buttons = findSpeedButtons();
-		if (!buttons.length) return;
-		const idx = getActiveSpeedButtonIdx(buttons);
-		if (idx === -1) return;
+		let speedChanged = false;
 
-		let clicked = false;
-		if (e.code === config.speedDownKey && idx > 0) {
-			buttons[idx - 1].click();
-			clicked = true;
-			e.preventDefault();
-			e.stopPropagation();
-		} else if (e.code === config.speedUpKey && idx < buttons.length - 1) {
-			buttons[idx + 1].click();
-			clicked = true;
-			e.preventDefault();
-			e.stopPropagation();
+		if (buttons.length > 0) {
+			const idx = getActiveSpeedButtonIdx(buttons);
+			if (idx !== -1) {
+				if (e.code === config.speedDownKey) {
+					if (idx > 0) {
+						buttons[idx - 1].click();
+						speedChanged = true;
+					} else {
+						// 최소 버튼일 때 직접 조절
+						const newRate = Math.max(0.25, video.playbackRate - 0.25);
+						video.playbackRate = newRate;
+						speedChanged = true;
+					}
+				} else if (e.code === config.speedUpKey) {
+					if (idx < buttons.length - 1) {
+						buttons[idx + 1].click();
+						speedChanged = true;
+					} else {
+						// 최대 버튼일 때 직접 조절
+						video.playbackRate += 0.25;
+						speedChanged = true;
+					}
+				}
+			}
+		} else {
+			// 버튼을 못 찾았을 경우 직접 조절 폴백
+			if (e.code === config.speedDownKey) {
+				video.playbackRate = Math.max(0.25, video.playbackRate - 0.25);
+				speedChanged = true;
+			} else if (e.code === config.speedUpKey) {
+				video.playbackRate += 0.25;
+				speedChanged = true;
+			}
 		}
 
-		// 3. 배속버튼 클릭 후 마우스오버 해제(mouseout 이벤트 디스패치)
-		if (clicked && hoveredBtn) {
+		if (speedChanged) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			// 배속 변경이 반영될 시간을 고려하여 지연 표시
+			setTimeout(() => {
+				showSpeedOverlay(video.playbackRate);
+			}, 50);
+		}
+
+		// 3. 배속버튼 클릭 후 마우스오버 해제
+		if (speedChanged && hoveredBtn) {
 			const mouseOutEvent = new MouseEvent('mouseout', { bubbles: true, cancelable: true });
 			hoveredBtn.dispatchEvent(mouseOutEvent);
 		}
