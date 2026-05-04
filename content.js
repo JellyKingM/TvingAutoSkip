@@ -83,30 +83,7 @@
 		return true;
 	}
 
-	// ===== (C) 배속 버튼 탐색 및 키 핸들러 =====
-	function findSpeedButtons() {
-		// 'control-button' 클래스를 가진 버튼들 중 첫번째 요소의 부모의 다음 형제의 모든 버튼을 리스트업
-		const controlBtns = document.querySelectorAll('button.control-button');
-		if (!controlBtns.length) return [];
-		const firstControlBtn = controlBtns[0];
-		const parent = firstControlBtn.parentElement;
-		if (!parent) return [];
-		let nextSibling = parent.nextElementSibling;
-		// 만약 바로 다음 형제가 없으면, 부모의 부모에서 다음 형제를 찾음 (유연성 확보)
-		if (!nextSibling && parent.parentElement) {
-			nextSibling = parent.parentElement.nextElementSibling;
-		}
-		if (!nextSibling) return [];
-		// 계층 상관없이 모든 버튼
-		const buttons = Array.from(nextSibling.querySelectorAll('button'));
-		return buttons.filter(isVisible);
-	}
-
-	function getActiveSpeedButtonIdx(buttons) {
-		return buttons.findIndex(btn => btn.classList.contains('PcPlayerMenu_active__HiYjc'));
-	}
-
-	// ===== (E) 배속 표시 오버레이 =====
+	// ===== (C) 재생 속도 조절 및 오버레이 =====
 	let speedOverlayTimer = null;
 	function showSpeedOverlay(speed) {
 		let overlay = document.getElementById('tving-auto-skip-speed-overlay');
@@ -152,68 +129,20 @@
 		const video = document.querySelector('video');
 		if (!video) return;
 
-		// 1. 첫번째 control-button에 mouseover 이벤트 디스패치
-		const controlBtns = document.querySelectorAll('button.control-button');
-		let hoveredBtn = null;
-		if (controlBtns.length > 0) {
-			hoveredBtn = controlBtns[0];
-			const mouseOverEvent = new MouseEvent('mouseover', { bubbles: true, cancelable: true });
-			hoveredBtn.dispatchEvent(mouseOverEvent);
-		}
-
-		// 2. 배속 버튼 탐색 및 클릭
-		const buttons = findSpeedButtons();
 		let speedChanged = false;
-
-		if (buttons.length > 0) {
-			const idx = getActiveSpeedButtonIdx(buttons);
-			if (idx !== -1) {
-				if (e.code === config.speedDownKey) {
-					if (idx > 0) {
-						buttons[idx - 1].click();
-						speedChanged = true;
-					} else {
-						// 최소 버튼일 때 직접 조절
-						const newRate = Math.max(0.25, video.playbackRate - 0.25);
-						video.playbackRate = newRate;
-						speedChanged = true;
-					}
-				} else if (e.code === config.speedUpKey) {
-					if (idx < buttons.length - 1) {
-						buttons[idx + 1].click();
-						speedChanged = true;
-					} else {
-						// 최대 버튼일 때 직접 조절
-						video.playbackRate += 0.25;
-						speedChanged = true;
-					}
-				}
-			}
-		} else {
-			// 버튼을 못 찾았을 경우 직접 조절 폴백
-			if (e.code === config.speedDownKey) {
-				video.playbackRate = Math.max(0.25, video.playbackRate - 0.25);
-				speedChanged = true;
-			} else if (e.code === config.speedUpKey) {
-				video.playbackRate += 0.25;
-				speedChanged = true;
-			}
+		if (e.code === config.speedDownKey) {
+			// 최소 0.25배속 유지
+			video.playbackRate = Math.max(0.25, video.playbackRate - 0.25);
+			speedChanged = true;
+		} else if (e.code === config.speedUpKey) {
+			video.playbackRate += 0.25;
+			speedChanged = true;
 		}
 
 		if (speedChanged) {
 			e.preventDefault();
 			e.stopPropagation();
-			
-			// 배속 변경이 반영될 시간을 고려하여 지연 표시
-			setTimeout(() => {
-				showSpeedOverlay(video.playbackRate);
-			}, 50);
-		}
-
-		// 3. 배속버튼 클릭 후 마우스오버 해제
-		if (speedChanged && hoveredBtn) {
-			const mouseOutEvent = new MouseEvent('mouseout', { bubbles: true, cancelable: true });
-			hoveredBtn.dispatchEvent(mouseOutEvent);
+			showSpeedOverlay(video.playbackRate);
 		}
 	}
 
