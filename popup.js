@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const DEFAULTS = {
     autoSkipEnabled: true,
+    hideOverlayEnabled: true,
     hotkeyCode: 'PageDown',
     speedDownKey: 'Comma',
     speedUpKey: 'Period',
@@ -26,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const resetSpeedBtn = document.getElementById('resetSpeedBtn');
   const autoSkipToggle = document.getElementById('autoSkipToggle');
   const autoSkipStatus = document.getElementById('autoSkipStatus');
+  const hideOverlayToggle = document.getElementById('hideOverlayToggle');
+  const hideOverlayStatus = document.getElementById('hideOverlayStatus');
 
   const onText = t('autoSkipOn') || 'On';
   const offText = t('autoSkipOff') || 'Off';
@@ -100,14 +103,21 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Auto-skip toggle
-  function setAutoSkipStatus(enabled) {
-    autoSkipStatus.textContent = enabled ? onText : offText;
+  function setStatusText(element, enabled) {
+    element.textContent = enabled ? onText : offText;
   }
 
   autoSkipToggle.addEventListener('change', (e) => {
     const enabled = e.target.checked;
     chrome.storage.sync.set({ autoSkipEnabled: enabled }, () => {
-      setAutoSkipStatus(enabled);
+      setStatusText(autoSkipStatus, enabled);
+    });
+  });
+
+  hideOverlayToggle.addEventListener('change', (e) => {
+    const enabled = e.target.checked;
+    chrome.storage.sync.set({ hideOverlayEnabled: enabled }, () => {
+      setStatusText(hideOverlayStatus, enabled);
     });
   });
 
@@ -117,7 +127,11 @@ document.addEventListener('DOMContentLoaded', () => {
     speedDownInput.value = items.speedDownKey;
     speedUpInput.value = items.speedUpKey;
     speedNormalInput.value = items.speedNormalKey;
+    
     autoSkipToggle.checked = !!items.autoSkipEnabled;
-    setAutoSkipStatus(!!items.autoSkipEnabled);
+    setStatusText(autoSkipStatus, !!items.autoSkipEnabled);
+    
+    hideOverlayToggle.checked = !!items.hideOverlayEnabled;
+    setStatusText(hideOverlayStatus, !!items.hideOverlayEnabled);
   });
 });

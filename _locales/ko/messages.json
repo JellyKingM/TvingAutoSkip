@@ -22,6 +22,7 @@
   "btnResetSpeed": { "message": "',' '.' '/' 로 초기화" },
 
   "labelAutoSkip": { "message": "오프닝 자동 건너뛰기" },
+  "labelHideOverlay": { "message": "연령 고지 숨기기" },
   "autoSkipOn": { "message": "켜짐" },
   "autoSkipOff": { "message": "꺼짐" }
 }

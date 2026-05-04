@@ -4,6 +4,7 @@
 	// ===== 기본 설정/상태 =====
 	const DEFAULTS = {
 		autoSkipEnabled: true,
+		hideOverlayEnabled: true,
 		hotkeyCode: 'PageDown', // Popup에서 변경 가능
 		speedDownKey: 'Comma',
 		speedUpKey: 'Period',
@@ -241,8 +242,13 @@
 		const target = findTestOverlayTarget();
 		if (!target) return false;
 
-		target.dataset.tvingAutoSkipHiddenOverlay = 'true';
-		target.style.setProperty('display', 'none', 'important');
+		if (config.hideOverlayEnabled) {
+			target.dataset.tvingAutoSkipHiddenOverlay = 'true';
+			target.style.setProperty('display', 'none', 'important');
+		} else if (target.dataset.tvingAutoSkipHiddenOverlay === 'true') {
+			target.dataset.tvingAutoSkipHiddenOverlay = 'false';
+			target.style.removeProperty('display');
+		}
 		return true;
 	}
 
@@ -378,11 +384,15 @@
 		if (area !== 'sync') return;
 
 		let needsObserverRestart = false;
+		let needsOverlayCheck = false;
 		for (let [key, { newValue }] of Object.entries(changes)) {
 			if (key in config) {
 				config[key] = newValue;
 				if (key === 'autoSkipEnabled') {
 					needsObserverRestart = true;
+				}
+				if (key === 'hideOverlayEnabled') {
+					needsOverlayCheck = true;
 				}
 			}
 		}
@@ -390,6 +400,10 @@
 		if (needsObserverRestart) {
 			if (config.autoSkipEnabled && isPlayerPage()) startObservingRound();
 			else stopObserving();
+		}
+
+		if (needsOverlayCheck) {
+			hideTestOverlayTarget();
 		}
 	});
 

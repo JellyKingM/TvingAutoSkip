@@ -22,6 +22,7 @@
   "btnResetSpeed": { "message": "Reset to , . /" },
 
   "labelAutoSkip": { "message": "Auto-skip Opening" },
+  "labelHideOverlay": { "message": "Hide Age Overlay" },
   "autoSkipOn": { "message": "On" },
   "autoSkipOff": { "message": "Off" }
 }
