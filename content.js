@@ -27,6 +27,7 @@
 	let lastObservedUrl = location.href;
 	let inited = false;
 	let lastAppliedVideo = null;
+	let lastShownSpeedVideo = null;
 
 	function isPlayerPage() {
 		return location.pathname.startsWith('/player/');
@@ -52,17 +53,34 @@
 	function applyStoredPlaybackRate() {
 		if (!isPlayerPage()) return;
 		const video = document.querySelector('video');
-		if (video && video !== lastAppliedVideo) {
-			lastAppliedVideo = video;
-			// 비디오 메타데이터 로드 대기 후 적용
-			const apply = () => {
-				if (config.lastPlaybackRate && config.lastPlaybackRate !== 1.0) {
-					video.playbackRate = config.lastPlaybackRate;
+		if (!video) {
+			lastAppliedVideo = null;
+			lastShownSpeedVideo = null;
+			return;
+		}
+
+		if (config.lastPlaybackRate && config.lastPlaybackRate !== 1.0) {
+			// 실제 배속이 설정값과 다르면 적용 (재생 시작 시 초기화 방지)
+			if (video.playbackRate !== config.lastPlaybackRate) {
+				video.playbackRate = config.lastPlaybackRate;
+				
+				// 영상당 한 번만 오버레이 표시 (또는 배속이 바뀔 때)
+				if (lastShownSpeedVideo !== video) {
+					lastShownSpeedVideo = video;
 					showSpeedOverlay(video.playbackRate);
 				}
-			};
-			if (video.readyState >= 1) apply();
-			else video.addEventListener('loadedmetadata', apply, { once: true });
+			}
+
+			// 새 비디오 요소 감지 시 이벤트 리스너 등록
+			if (video !== lastAppliedVideo) {
+				lastAppliedVideo = video;
+				// 재생 시작(playing) 시점에 다시 한번 확인 (일부 플레이어는 play 시점에 배속 초기화함)
+				video.addEventListener('playing', () => {
+					if (video.playbackRate !== config.lastPlaybackRate) {
+						video.playbackRate = config.lastPlaybackRate;
+					}
+				}, { once: true });
+			}
 		}
 	}
 
