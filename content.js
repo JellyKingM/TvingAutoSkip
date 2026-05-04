@@ -7,7 +7,8 @@
 		hotkeyCode: 'PageDown', // Popup에서 변경 가능
 		speedDownKey: 'Comma',
 		speedUpKey: 'Period',
-		speedNormalKey: 'Slash'
+		speedNormalKey: 'Slash',
+		lastPlaybackRate: 1.0
 	};
 
 	const OBSERVER_TIMEOUT_MS = 30_000;
@@ -25,6 +26,7 @@
 	let lastNextClickAt = 0;
 	let lastObservedUrl = location.href;
 	let inited = false;
+	let lastAppliedVideo = null;
 
 	function isPlayerPage() {
 		return location.pathname.startsWith('/player/');
@@ -39,6 +41,29 @@
 					 style.visibility !== 'hidden' &&
 					 style.display !== 'none' &&
 					 el.offsetParent !== null;
+	}
+
+	// ===== 재생 속도 영속성 관리 =====
+	function savePlaybackRate(rate) {
+		config.lastPlaybackRate = rate;
+		chrome.storage.sync.set({ lastPlaybackRate: rate });
+	}
+
+	function applyStoredPlaybackRate() {
+		if (!isPlayerPage()) return;
+		const video = document.querySelector('video');
+		if (video && video !== lastAppliedVideo) {
+			lastAppliedVideo = video;
+			// 비디오 메타데이터 로드 대기 후 적용
+			const apply = () => {
+				if (config.lastPlaybackRate && config.lastPlaybackRate !== 1.0) {
+					video.playbackRate = config.lastPlaybackRate;
+					showSpeedOverlay(video.playbackRate);
+				}
+			};
+			if (video.readyState >= 1) apply();
+			else video.addEventListener('loadedmetadata', apply, { once: true });
+		}
 	}
 
 	// ===== (A) 오프닝 스킵 버튼 – 트리 기반 탐색 =====
@@ -148,6 +173,7 @@
 		if (speedChanged) {
 			e.preventDefault();
 			e.stopPropagation();
+			savePlaybackRate(video.playbackRate);
 			showSpeedOverlay(video.playbackRate);
 		}
 	}
@@ -229,6 +255,9 @@
 	function startObservingRound() {
 		if (!config.autoSkipEnabled || !isPlayerPage()) return;
 
+		// 배속 자동 적용 시도
+		applyStoredPlaybackRate();
+
 		stopObserving();
 
 		const first = findSkipOpeningButton();
@@ -243,6 +272,9 @@
 		} catch {}
 
 		scanTimer = setInterval(() => {
+			// 배속 자동 적용 시도 (비디오 요소 로드 대기)
+			applyStoredPlaybackRate();
+
 			const btn = findSkipOpeningButton();
 			if (btn && clickOnce(btn)) stopObserving();
 		}, SCAN_INTERVAL_MS);
@@ -271,8 +303,12 @@
 	function onUrlMaybeChanged() {
 		if (location.href !== lastObservedUrl) {
 			lastObservedUrl = location.href;
-			if (config.autoSkipEnabled && isPlayerPage()) startObservingRound();
-			else stopObserving();
+			if (isPlayerPage()) {
+				applyStoredPlaybackRate();
+				if (config.autoSkipEnabled) startObservingRound();
+			} else {
+				stopObserving();
+			}
 		}
 	}
 
