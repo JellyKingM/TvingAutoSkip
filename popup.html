@@ -77,9 +77,19 @@
 
   <fieldset>
     <legend data-i18n="labelSpeedHotkey"></legend>
-    <div style="display:flex; gap:8px; margin-bottom: 4px;">
-      <input id="speedDownInput" type="text" style="width:48%; margin:0;" data-i18n-placeholder="speedDownPlaceholder" readonly />
-      <input id="speedUpInput" type="text" style="width:48%; margin:0;" data-i18n-placeholder="speedUpPlaceholder" readonly />
+    <div style="display:flex; gap:8px; margin-bottom: 8px;">
+      <div style="width: 32%;">
+        <label style="font-size: 11px; margin-bottom: 2px;" data-i18n="labelSpeedDown"></label>
+        <input id="speedDownInput" type="text" style="width:100%; margin:0;" data-i18n-placeholder="speedDownPlaceholder" readonly />
+      </div>
+      <div style="width: 32%;">
+        <label style="font-size: 11px; margin-bottom: 2px;" data-i18n="labelSpeedUp"></label>
+        <input id="speedUpInput" type="text" style="width:100%; margin:0;" data-i18n-placeholder="speedUpPlaceholder" readonly />
+      </div>
+      <div style="width: 32%;">
+        <label style="font-size: 11px; margin-bottom: 2px;" data-i18n="labelSpeedNormal"></label>
+        <input id="speedNormalInput" type="text" style="width:100%; margin:0;" data-i18n-placeholder="speedNormalPlaceholder" readonly />
+      </div>
     </div>
     <div class="hint" data-i18n="speedHotkeyHint"></div>
     <div style="margin-top:8px;">

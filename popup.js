@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     autoSkipEnabled: true,
     hotkeyCode: 'PageDown',
     speedDownKey: 'Comma',
-    speedUpKey: 'Period'
+    speedUpKey: 'Period',
+    speedNormalKey: 'Slash'
   };
 
   // Element references
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const resetBtn = document.getElementById('resetBtn');
   const speedDownInput = document.getElementById('speedDownInput');
   const speedUpInput = document.getElementById('speedUpInput');
+  const speedNormalInput = document.getElementById('speedNormalInput');
   const resetSpeedBtn = document.getElementById('resetSpeedBtn');
   const autoSkipToggle = document.getElementById('autoSkipToggle');
   const autoSkipStatus = document.getElementById('autoSkipStatus');
@@ -38,12 +40,33 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         e.stopPropagation();
         const code = e.code; // Use layout-independent key code
-        inputElement.value = code;
-        chrome.storage.sync.set({ [storageKey]: code });
 
-        window.removeEventListener('keydown', onKey, true);
-        inputElement.blur();
-        inputElement.placeholder = originalPlaceholder;
+        // 중복 체크
+        chrome.storage.sync.get(DEFAULTS, (items) => {
+          const keys = {
+            hotkeyCode: items.hotkeyCode,
+            speedDownKey: items.speedDownKey,
+            speedUpKey: items.speedUpKey,
+            speedNormalKey: items.speedNormalKey
+          };
+          
+          // 현재 수정하려는 키는 제외하고 체크
+          delete keys[storageKey];
+          
+          if (Object.values(keys).includes(code)) {
+            // 중복된 경우 시각적 피드백 (간단히 배경색 빨간색으로 깜빡임 등 처리 가능)
+            inputElement.style.backgroundColor = '#ffcccc';
+            setTimeout(() => { inputElement.style.backgroundColor = ''; }, 500);
+            return;
+          }
+
+          inputElement.value = code;
+          chrome.storage.sync.set({ [storageKey]: code });
+
+          window.removeEventListener('keydown', onKey, true);
+          inputElement.blur();
+          inputElement.placeholder = originalPlaceholder;
+        });
       };
 
       window.addEventListener('keydown', onKey, true);
@@ -54,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
   createKeyListener(hotkeyInput, 'hotkeyCode', t('hotkeyPlaceholder'));
   createKeyListener(speedDownInput, 'speedDownKey', t('speedDownPlaceholder'));
   createKeyListener(speedUpInput, 'speedUpKey', t('speedUpPlaceholder'));
+  createKeyListener(speedNormalInput, 'speedNormalKey', t('speedNormalPlaceholder'));
 
   // Reset buttons
   resetBtn.addEventListener('click', () => {
@@ -63,10 +87,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   resetSpeedBtn.addEventListener('click', () => {
-    const newKeys = { speedDownKey: DEFAULTS.speedDownKey, speedUpKey: DEFAULTS.speedUpKey };
+    const newKeys = { 
+      speedDownKey: DEFAULTS.speedDownKey, 
+      speedUpKey: DEFAULTS.speedUpKey,
+      speedNormalKey: DEFAULTS.speedNormalKey
+    };
     chrome.storage.sync.set(newKeys, () => {
       speedDownInput.value = DEFAULTS.speedDownKey;
       speedUpInput.value = DEFAULTS.speedUpKey;
+      speedNormalInput.value = DEFAULTS.speedNormalKey;
     });
   });
 
@@ -87,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hotkeyInput.value = items.hotkeyCode;
     speedDownInput.value = items.speedDownKey;
     speedUpInput.value = items.speedUpKey;
+    speedNormalInput.value = items.speedNormalKey;
     autoSkipToggle.checked = !!items.autoSkipEnabled;
     setAutoSkipStatus(!!items.autoSkipEnabled);
   });

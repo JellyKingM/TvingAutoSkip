@@ -6,7 +6,8 @@
 		autoSkipEnabled: true,
 		hotkeyCode: 'PageDown', // Popup에서 변경 가능
 		speedDownKey: 'Comma',
-		speedUpKey: 'Period'
+		speedUpKey: 'Period',
+		speedNormalKey: 'Slash'
 	};
 
 	const OBSERVER_TIMEOUT_MS = 30_000;
@@ -124,7 +125,9 @@
 
 	function handleSpeedKey(e) {
 		if (isEditable(document.activeElement)) return;
-		if (e.code !== config.speedDownKey && e.code !== config.speedUpKey) return;
+		if (e.code !== config.speedDownKey && 
+			e.code !== config.speedUpKey && 
+			e.code !== config.speedNormalKey) return;
 
 		const video = document.querySelector('video');
 		if (!video) return;
@@ -136,6 +139,9 @@
 			speedChanged = true;
 		} else if (e.code === config.speedUpKey) {
 			video.playbackRate += 0.25;
+			speedChanged = true;
+		} else if (e.code === config.speedNormalKey) {
+			video.playbackRate = 1.0;
 			speedChanged = true;
 		}
 

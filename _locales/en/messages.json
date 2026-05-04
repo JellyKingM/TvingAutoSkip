@@ -14,8 +14,12 @@
   "labelSpeedHotkey": { "message": "Playback Speed Hotkeys" },
   "speedDownPlaceholder": { "message": "Click for Speed Down" },
   "speedUpPlaceholder": { "message": "Click for Speed Up" },
+  "speedNormalPlaceholder": { "message": "Click for 1x Speed" },
+  "labelSpeedDown": { "message": "Down" },
+  "labelSpeedUp": { "message": "Up" },
+  "labelSpeedNormal": { "message": "1x" },
   "speedHotkeyHint": { "message": "Press these keys on the player page to adjust playback speed." },
-  "btnResetSpeed": { "message": "Reset to , and ." },
+  "btnResetSpeed": { "message": "Reset to , . /" },
 
   "labelAutoSkip": { "message": "Auto-skip Opening" },
   "autoSkipOn": { "message": "On" },
