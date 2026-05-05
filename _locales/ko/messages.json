@@ -20,7 +20,7 @@
   "labelSpeedNormal": { "message": "1배속" },
   "speedHotkeyHint": { "message": "플레이어 페이지에서 이 단축키를 눌러 재생 속도를 조절합니다." },
   "btnResetSpeed": { "message": "',' '.' '/' 로 초기화" },
-
+  "labelKeepSpeed": { "message": "영상이 변경되어도 재생속도 유지" },
   "labelAutoSkip": { "message": "오프닝 자동 건너뛰기" },
   "labelHideOverlay": { "message": "연령 고지 숨기기" },
   "autoSkipOn": { "message": "켜짐" },

@@ -9,6 +9,7 @@
 		speedDownKey: 'Comma',
 		speedUpKey: 'Period',
 		speedNormalKey: 'Slash',
+		keepSpeedEnabled: true,
 		lastPlaybackRate: 1.0
 	};
 
@@ -52,7 +53,7 @@
 	}
 
 	function applyStoredPlaybackRate() {
-		if (!isPlayerPage()) return;
+		if (!isPlayerPage() || !config.keepSpeedEnabled) return;
 		const video = document.querySelector('video');
 		if (!video) {
 			lastAppliedVideo = null;
@@ -393,6 +394,10 @@
 				}
 				if (key === 'hideOverlayEnabled') {
 					needsOverlayCheck = true;
+				}
+				if (key === 'keepSpeedEnabled' && !newValue) {
+					// 유지 기능이 꺼지면 현재 배속을 1.0으로 초기화할 수도 있으나, 
+					// 여기서는 다음 영상부터 적용되도록 설정값만 업데이트함.
 				}
 			}
 		}

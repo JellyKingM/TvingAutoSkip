@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const DEFAULTS = {
     autoSkipEnabled: true,
     hideOverlayEnabled: true,
+    keepSpeedEnabled: true,
     hotkeyCode: 'PageDown',
     speedDownKey: 'Comma',
     speedUpKey: 'Period',
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const speedDownInput = document.getElementById('speedDownInput');
   const speedUpInput = document.getElementById('speedUpInput');
   const speedNormalInput = document.getElementById('speedNormalInput');
+  const keepSpeedToggle = document.getElementById('keepSpeedToggle');
   const resetSpeedBtn = document.getElementById('resetSpeedBtn');
   const autoSkipToggle = document.getElementById('autoSkipToggle');
   const autoSkipStatus = document.getElementById('autoSkipStatus');
@@ -102,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Auto-skip toggle
+  // Status text helper
   function setStatusText(element, enabled) {
     element.textContent = enabled ? onText : offText;
   }
@@ -121,6 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  keepSpeedToggle.addEventListener('change', (e) => {
+    chrome.storage.sync.set({ keepSpeedEnabled: e.target.checked });
+  });
+
   // Initial load from storage
   chrome.storage.sync.get(DEFAULTS, (items) => {
     hotkeyInput.value = items.hotkeyCode;
@@ -133,5 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     hideOverlayToggle.checked = !!items.hideOverlayEnabled;
     setStatusText(hideOverlayStatus, !!items.hideOverlayEnabled);
+
+    keepSpeedToggle.checked = !!items.keepSpeedEnabled;
   });
 });

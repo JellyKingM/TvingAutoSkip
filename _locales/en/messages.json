@@ -20,7 +20,7 @@
   "labelSpeedNormal": { "message": "1x" },
   "speedHotkeyHint": { "message": "Press these keys on the player page to adjust playback speed." },
   "btnResetSpeed": { "message": "Reset to , . /" },
-
+  "labelKeepSpeed": { "message": "Keep speed when video changes" },
   "labelAutoSkip": { "message": "Auto-skip Opening" },
   "labelHideOverlay": { "message": "Hide Age Overlay" },
   "autoSkipOn": { "message": "On" },
