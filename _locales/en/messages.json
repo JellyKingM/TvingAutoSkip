@@ -1,7 +1,7 @@
 {
   "appName": { "message": "tving Opening Auto Skip" },
   "appShortName": { "message": "tving Auto Skip" },
-  "appDesc": { "message": "Automatically clicks the \"Skip Opening\" button on TVING." },
+  "appDesc": { "message": "Makes TVING easier to watch by supporting opening auto-skip, next episode hotkeys, and playback speed hotkeys." },
   "actionTitle": { "message": "tving Opening Auto Skip" },
 
   "popupTitle": { "message": "tving Auto Skip Settings" },

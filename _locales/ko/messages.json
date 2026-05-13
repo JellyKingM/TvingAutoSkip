@@ -1,7 +1,7 @@
 {
   "appName": { "message": "티빙 오프닝 자동 건너뛰기" },
   "appShortName": { "message": "티빙 자동 건너뛰기" },
-  "appDesc": { "message": "TVING에서 '오프닝 건너뛰기' 버튼을 자동으로 눌러줍니다." },
+  "appDesc": { "message": "TVING에서 오프닝 건너뛰기, 다음 화 이동, 재생 속도 조절을 더 편하게 사용할 수 있게 도와줍니다." },
   "actionTitle": { "message": "티빙 오프닝 자동 건너뛰기" },
 
   "popupTitle": { "message": "티빙 자동 건너뛰기 설정" },
